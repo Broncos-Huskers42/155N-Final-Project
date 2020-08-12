@@ -1,0 +1,47 @@
+function [] = plotFinalProject(C0,C1,C2,xLim,P,Ge,Te,xLim2)
+figure;
+plotEfficiencyVsPowerIn(C0,C1,C2,xLim);
+
+plotEnduranceVsFuelCapacity(P,Ge,Te,xLim2);
+end
+
+%Function to plot the data for the efficiency vs Power in (Poi)
+    %Note eff = efficiency
+function [] = plotEfficiencyVsPowerIn(C0,C1,C2,xLim)
+    pIn = 0: 0.1 : xLim(end);
+    for i = 1 : numel(pIn)
+        pLoss(i) = C0 + (pIn(i)*C1) + C2*(pIn(i).^2);
+    end
+    pOut = pIn - pLoss;
+    eff = pOut ./ pIn;
+  
+   subplot(2,1,1);
+   plot(pIn,eff,'MarkerSize',3,'MarkerFaceColor',[0 0 1]);
+   
+   xlabel('Power In (in kWh)');
+   ylabel('Effeciency');
+   title('Efficiency in terms of Power In (kWh)');
+   
+   xlim([0 (xLim(end)+5)]);
+   ylim([0 1]);
+  
+end
+
+%Function to plot the data for the endurance vs fuel capacity (Cf)
+    % Note endur = endurance
+function [] = plotEnduranceVsFuelCapacity(P,Ge,Te,xLim2)
+    
+    Cf = xLim2(1) : 0.1 : xLim2(end);
+    Rf = P ./ (Ge*Te);
+    endur = Cf ./ Rf;
+
+    subplot(2,1,2);
+    plot(Cf,endur,'MarkerSize',3,'MarkerFaceColor',[0 0 1]);
+    
+    xlabel('Fuel Capacity (in liters)');
+    ylabel('Endurance');
+    title('Endurance in terms of Fuel Capacity (in liters)');
+    
+    xlim([(xLim2(1) - 5)  (xLim2(end) + 5)]);
+    ylim([0 1]);
+end
